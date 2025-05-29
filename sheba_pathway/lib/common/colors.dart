@@ -1,7 +1,7 @@
 import 'dart:ui';
 final primaryColor= const Color.fromRGBO(8, 35, 62, 1);
 final pinkColor=Color.fromRGBO(239,93,168,1);
-final pupleColor=Color.fromRGBO(118, 3, 160, 1);
+final purpleColor=Color.fromRGBO(118, 3, 160, 1);
 final greengrey=Color.fromRGBO(233,239,236,1);
 final blueDark=Color.fromRGBO(9, 44, 76, 1);
 final secondaryColor=Color.fromRGBO(122,96,19,1);
@@ -12,3 +12,4 @@ final errorColor=Color.fromRGBO(235,87,87,1);
 final black2=Color.fromRGBO(29,29,29,1);
 final black3=Color.fromRGBO(40,40,40,1);
 final grey1=Color.fromRGBO(187, 185, 185, 0.973);
+final restaurantColor=const Color.fromARGB(255, 239, 125, 4);

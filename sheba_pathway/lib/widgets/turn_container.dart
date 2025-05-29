@@ -139,7 +139,7 @@ class _TurnContainerState extends State<TurnContainer>
                       Icon(
                         _getManeuverIcon(widget.type,),
                         size: 25,
-                       color: pupleColor
+                       color: purpleColor
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),

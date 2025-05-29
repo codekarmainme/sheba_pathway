@@ -1,0 +1,21 @@
+{
+  "welcomeBack": "Welcome back!",
+  "email": "Email",
+  "password": "Password",
+  "rememberMe": "Remember me",
+  "forgotPassword": "Forgot password?",
+  "signIn": "Sign in",
+  "pleaseFillAllFields": "Please fill all the fields.",
+  "dontHaveAccount": "Don't have an account?",
+  "signUpHere": "Sign up here",
+  "start_unforgettable_trips": "Start you \n Unforgetable trips",
+  "username": "Username",
+  "confirm_password": "Confirm password",
+  "sign_up": "Sign up",
+  "password_does_not_match": "Password does not match",
+  "signup_success": "You have successfully signed up",
+  "do_you_have_account": "Do you have an account?",
+  "sign_in_here": "Sign in here",
+  "welcome_location_message": "We need your location for the better experience and accurate result of trips and hotels.",
+  "allow_location": "Allow location"
+}

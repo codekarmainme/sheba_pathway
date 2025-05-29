@@ -1,102 +1,159 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sheba_pathway/common/colors.dart';
 import 'package:sheba_pathway/common/typography.dart';
+import 'package:sheba_pathway/screens/setting_screen.dart';
+import 'package:sheba_pathway/widgets/history_section.dart';
+import 'package:sheba_pathway/widgets/review_section.dart';
+import 'package:sheba_pathway/widgets/saved_section.dart';
+import 'package:sheba_pathway/widgets/travel_plan_section.dart';
 
-class YouScreen extends StatelessWidget {
+class YouScreen extends StatefulWidget {
   const YouScreen({super.key});
 
   @override
+  State<YouScreen> createState() => _YouScreenState();
+}
+
+class _YouScreenState extends State<YouScreen> {
+  List<Map<String, dynamic>> _catagories = [
+    {"name": 'History', 'section': HistorySection()},
+    {"name": 'Saved', 'section': SavedSection()},
+    {"name": 'Travel plans', 'section': TravelPlanSection()},
+    {"name": 'Reviewed', 'section': ReviewSection()}
+  ];
+  late Map<String, dynamic> _selectedCatagory;
+  void setSelectedCatagory(Map<String, dynamic> catagory) {
+    setState(() {
+      _selectedCatagory = catagory;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCatagory = {"name": 'History', 'section': HistorySection()};
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Padding(
+            padding: const EdgeInsets.only(left: 4.0),
+            child: Text(
+              "Profile",
+              style: largeText.copyWith(
+                  color: black2, fontWeight: FontWeight.bold),
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SettingScreen()));
+              },
+              icon: Icon(Icons.settings, color: black2),
+            ),
+          ],
+          automaticallyImplyLeading: false,
+        ),
+        body: SingleChildScrollView(
+
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage("assets/images/pp.jpg"),
+          
+            children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: AssetImage("assets/images/pp.jpg"),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Background color for the icon
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.edit,
+                            color: black2,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
+                ),
+              ),
+              Text(
+                "Joe Doe",
+                style: normalText.copyWith(
+                    color: black2, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                "Traveler",
+                style: normalText.copyWith(color: black2.withOpacity(0.8)),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _contributeTypeContainer("Hotel", Icons.hotel),
+                    _contributeTypeContainer("Home", Icons.home),
+                    _contributeTypeContainer(
+                        "Travel destination", Icons.add_location),
+                    _contributeTypeContainer(
+                        "Update places", Icons.edit_location),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: _catagories.map((catagory) {
+                  return GestureDetector(
+                    onTap: () {
+                      setSelectedCatagory(catagory);
+                    },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white, // Background color for the icon
-                        shape: BoxShape.circle,
+                        border: catagory == _selectedCatagory
+                            ? Border(
+                                bottom: BorderSide(
+                                  color: black2,
+                                  width: 3,
+                                ),
+                              )
+                            : null,
                       ),
-                      child: Icon(
-                        Icons.edit,
-                        color: black2,
-                        size: 20,
+                      child: Text(
+                        catagory['name'],
+                        style: normalText.copyWith(
+                            color: black2, fontWeight: FontWeight.bold),
                       ),
                     ),
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
-            ),
-          ),
-          Text(
-            "Joe Doe",
-            style:
-                normalText.copyWith(color: black2, fontWeight: FontWeight.bold),
-          ),
-          Text(
-            "Traveler",
-            style: normalText.copyWith(color: black2.withOpacity(0.8)),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _contributeTypeContainer("Hotel", Icons.hotel),
-                _contributeTypeContainer("Home", Icons.home),
-                _contributeTypeContainer(
-                    "Travel destination", Icons.add_location),
-                    _contributeTypeContainer("Add hotel", Icons.add_location),
-                _contributeTypeContainer("Update places", Icons.edit_location),
-                
-
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                "Your places",
-                style: normalText.copyWith(
-                    color: black2, fontWeight: FontWeight.bold),
-              ),
-              Text("Saved",
-                  style: normalText.copyWith(
-                      color: black2, fontWeight: FontWeight.bold)),
-              Text(
-                "Want to go",
-                style: normalText.copyWith(
-                    color: black2, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                "Reviwed",
-                style: normalText.copyWith(
-                    color: black2, fontWeight: FontWeight.bold),
-              )
+              Divider(),
+              SizedBox(
+                height: 400,
+                child: _selectedCatagory['section'])
             ],
           ),
-          Divider(
-
-          ),
-          Expanded(child: Center(child: Text("You don't add any place yet",style: normalText,)))
-        ],
+        ),
       ),
     );
   }

@@ -1,19 +1,25 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sheba_pathway/bloc/mapping_bloc/location_selection/location_selection_bloc.dart';
+import 'package:sheba_pathway/bloc/mapping_bloc/location_selection/location_selection_event.dart';
 import 'package:sheba_pathway/common/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sheba_pathway/provider/mapping_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sheba_pathway/common/typography.dart';
+import 'package:sheba_pathway/bloc/mapping_bloc/fetchlocationsearchresult/bloc/fetchlocationsearchresult_bloc.dart';
+import 'package:sheba_pathway/bloc/mapping_bloc/fetchlocationsearchresult/bloc/fetchlocationsearchresult_event.dart';
+import 'package:sheba_pathway/bloc/mapping_bloc/fetchlocationsearchresult/bloc/fetchlocationsearchresult_state.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class PlaceSearchDelegate extends SearchDelegate<String> {
   final bool isStartLocation;
-  final bool
-      isaddDestination; //to determine if the input clicked is fro added destination inputs
+  final bool isaddDestination;
   PlaceSearchDelegate(
       {required this.isStartLocation, this.isaddDestination = false});
+
   TextStyle get searchFieldStyle => normalText.copyWith(
         color: Colors.black,
       );
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -44,134 +50,103 @@ class PlaceSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final mappingProvider =
-        Provider.of<MappingProvider>(context, listen: false);
-    mappingProvider.fetchAutoCompleteResults(query, isStartLocation);
-
-    return Consumer<MappingProvider>(
-      builder: (context, locationProvider, child) {
-        if (locationProvider.startautoCompleteResults.isEmpty &&
-            locationProvider.destinationautoCompleteResults.isEmpty) {
-          return Center(
-            child: Text('No results found', style: normalText),
+    if (query.isNotEmpty) {
+      context.read<FetchlocationsearchresultBloc>().add(
+            FetchAutoCompleteResults(query, isStartLocation),
           );
+    }
+
+    return BlocBuilder<FetchlocationsearchresultBloc,
+        FetchlocationsearchresultState>(
+      builder: (context, state) {
+        if (state is FetchlocationsearchresultLoding) {
+          return Center(child: CircularProgressIndicator());
+        } else if (state is FetchlocationsearchresultSuccess) {
+          final results = state.results;
+          if (results.isEmpty) {
+            return Center(child: Text('No results found', style: normalText));
+          }
+          return ListView.builder(
+            itemCount: results.length,
+            itemBuilder: (context, index) {
+              final result = results[index];
+              return ListTile(
+                title: Text(result['name'], style: normalText),
+                onTap: () {
+                  close(context, result['name']);
+                },
+              );
+            },
+          );
+        } else if (state is FetchlocationsearchresultError) {
+          return Center(
+              child: Text(state.errorMessage,
+                  style: normalText.copyWith(color: errorColor)));
         }
-
-        final results = isStartLocation
-            ? locationProvider.startautoCompleteResults
-            : locationProvider.destinationautoCompleteResults;
-
-        return ListView.builder(
-          itemCount: results.length,
-          itemBuilder: (context, index) {
-            final result = results[index];
-            return ListTile(
-              title: Text(result['name'], style: normalText),
-              onTap: () {
-                close(context, result['name']);
-              },
-            );
-          },
-        );
+        return Center(child: Text('No results found', style: normalText));
       },
     );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final mappingProvider =
-        Provider.of<MappingProvider>(context, listen: false);
-    // final localStorageProvider =
-    //     Provider.of<LocalStorageProvider>(context, listen: false);
     if (query.isNotEmpty) {
-      mappingProvider.fetchAutoCompleteResults(query, isStartLocation);
+      context.read<FetchlocationsearchresultBloc>().add(
+            FetchAutoCompleteResults(query, isStartLocation),
+          );
     }
 
-    return Consumer<MappingProvider>(
-      builder: (context, mappingProvider, child) {
-        if (mappingProvider.startautoCompleteResults.isEmpty &&
-            mappingProvider.destinationautoCompleteResults.isEmpty) {
+    return BlocBuilder<FetchlocationsearchresultBloc,
+        FetchlocationsearchresultState>(
+      builder: (context, state) {
+        if (state is FetchlocationsearchresultLoding) {
           return Center(
-            child: Text('No suggestions', style: normalText),
+              child: LoadingAnimationWidget.discreteCircle(
+            color: successColor,
+            secondRingColor: warningColor,
+            thirdRingColor: errorColor,
+            size: 40,
+          ));
+          ;
+        } else if (state is FetchlocationsearchresultSuccess) {
+          final results = state.results;
+          if (results.isEmpty) {
+            return Center(child: Text('No suggestions', style: normalText));
+          }
+          return ListView.builder(
+            itemCount: results.length,
+            itemBuilder: (context, index) {
+              final result = results[index];
+              return ListTile(
+                title: Text(result['name'], style: normalText),
+                leading: Icon(FontAwesomeIcons.locationDot, size: 15),
+                onTap: () {
+                  final coordinates = extractCoordinates(result['coordinates']);
+                  final location = {
+                    'name': result['name'],
+                    'coordinates': coordinates,
+                  };
+
+                  if (isStartLocation) {
+                    context
+                        .read<LocationSelectionBloc>()
+                        .add(SetStartLocation(location));
+                  } else {
+                    context
+                        .read<LocationSelectionBloc>()
+                        .add(SetDestinationLocation(location));
+                  }
+                  close(context, result['name']);
+                },
+              );
+            },
           );
+        } else if (state is FetchlocationsearchresultError) {
+          return Center(
+              child: Text("Something went wrong",
+                  style: normalText.copyWith(color: errorColor)));
         }
-
-        final results = isStartLocation
-            ? mappingProvider.startautoCompleteResults
-            : mappingProvider.destinationautoCompleteResults;
-
-        return ListView.builder(
-          itemCount: results.length,
-          itemBuilder: (context, index) {
-            final result = results[index];
-            return ListTile(
-              title: Text(result['name'], style: normalText),
-              
-              leading:Icon(FontAwesomeIcons.locationDot,size: 15,),
-              onTap: () {
-                final coordinates = extractCoordinates(result['coordinates']);
-                print(coordinates);
-                if (coordinates != null && isaddDestination == false) {
-                  if (!isStartLocation &&
-                      mappingProvider.selectedStartlocation != null &&
-                      mappingProvider.selectedStartlocation!.isNotEmpty) {
-                    final startCoordinates = mappingProvider
-                        .selectedStartlocation![1]['coordinates'];
-                    if (startCoordinates != null &&
-                        startCoordinates[0] == coordinates[0] &&
-                        startCoordinates[1] == coordinates[1]) {
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   snackBarWidget(
-                      //       context,
-                      //       "Start and destination locations cannot be the same.",
-                      //       errorColor),
-                      // );
-                      return;
-                    }
-                  }
-                  isStartLocation
-                      ? mappingProvider.setselectedStartlocation([
-                          {
-                            "name": result['name'],
-                          },
-                          {
-                            "coordinates": coordinates,
-                          },
-                        ])
-                      : mappingProvider.setselectedDestinationLocation([
-                          {
-                            "name": result['name'],
-                          },
-                          {
-                            "coordinates": coordinates,
-                          },
-                        ]);
-                  if (isStartLocation == false) {
-                    Navigator.pop(context);
-                  }
-                  // localStorageProvider.addPlace(result['name'],
-                  //     coordinates); //Storing the searched result to the local memory
-                  query = result['name'];
-                  showResults(context);
-                } else if (coordinates != null && isaddDestination == true) {
-                  mappingProvider.addSelectedDestination([
-                    {
-                      "name": result['name'],
-                    },
-                    {
-                      "coordinates": coordinates,
-                    },
-                  ]);
-                  // localStorageProvider.addPlace(result['name'],
-                  //     coordinates); //Storing the searched result to the local memory
-
-                  query = result['name'];
-                  showResults(context);
-                }
-              },
-            );
-          },
-        );
+        return Center(child: Text('No suggestions', style: normalText));
       },
     );
   }
@@ -180,9 +155,7 @@ class PlaceSearchDelegate extends SearchDelegate<String> {
     if (coordinates is List) {
       if (coordinates.isNotEmpty) {
         if (coordinates[0] is List) {
-          // Handle array of arrays
           if (coordinates[0].isNotEmpty && coordinates[0][0] is List) {
-            // Handle array of array of arrays
             if (coordinates[0][0].isNotEmpty &&
                 coordinates[0][0][0] is double) {
               return [coordinates[0][0][1], coordinates[0][0][0]];

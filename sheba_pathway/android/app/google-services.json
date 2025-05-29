@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "895293275487",
+    "project_id": "shebapathway",
+    "storage_bucket": "shebapathway.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895293275487:android:f719d2150b9a178387caea",
+        "android_client_info": {
+          "package_name": "com.example.sheba_pathway"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBu-D9Ulvfin9klDLBqu9bKK0JkibfsV8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

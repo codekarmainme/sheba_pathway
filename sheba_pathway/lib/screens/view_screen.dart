@@ -1,14 +1,38 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:sheba_pathway/common/colors.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sheba_pathway/common/typography.dart';
+import 'package:sheba_pathway/models/top_trips_model.dart';
 import 'package:sheba_pathway/screens/map_screen.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:sheba_pathway/widgets/add_sheet.dart';
 import 'package:sheba_pathway/widgets/review_container.dart';
 
-class ViewScreen extends StatelessWidget {
-  const ViewScreen({super.key});
+class ViewScreen extends StatefulWidget {
+  final TopTripsModel trip;
+
+  const ViewScreen({super.key, required this.trip});
+
+  @override
+  State<ViewScreen> createState() => _ViewScreenState();
+}
+
+class _ViewScreenState extends State<ViewScreen> {
+  MapLibreMapController? mapController;
+  late List<String> assetNames;
+  int _currentImage = 0;
+  @override
+  void initState() {
+    super.initState();
+    assetNames = [
+      widget.trip.assetName,
+      widget.trip.assetName,
+      widget.trip.assetName
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,72 +44,161 @@ class ViewScreen extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      width: double.infinity,
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          PageView.builder(
+                            itemCount: assetNames.length,
+                            onPageChanged: (index) {
+                              setState(() {
+                                _currentImage = index;
+                              });
+                            },
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  image: DecorationImage(
+                                    image: AssetImage(assetNames[index]),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          Positioned(
+                            top: 24,
+                            left: 16,
+                            right: 16,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Back button
+                                CircleAvatar(
+                                  backgroundColor:
+                                      Colors.black.withOpacity(0.5),
+                                  child: IconButton(
+                                    icon: Icon(Icons.arrow_back,
+                                        color: Colors.white),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                ),
+                                // Place name
+                                Expanded(
+                                  child: Center(
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 6),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.4),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        widget.trip.placeName,
+                                        style: GoogleFonts.sora(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                          letterSpacing: 1,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                CircleAvatar(
+                                  backgroundColor:
+                                      Colors.black.withOpacity(0.5),
+                                  child: IconButton(
+                                    icon: Icon(Icons.favorite_border,
+                                        color: Colors.white),
+                                    onPressed: () {},
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 12,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(
+                                assetNames.length,
+                                (index) => Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 3),
+                                  width: _currentImage == index ? 12 : 8,
+                                  height: 8,
+                                  decoration: BoxDecoration(
+                                    color: _currentImage == index
+                                        ? primaryColor
+                                        : Colors.white70,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Icon(Icons.arrow_back)),
                     Text(
-                      "Selassie house view",
-                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                      widget.trip.placeName,
+                      style: GoogleFonts.sora(fontWeight: FontWeight.bold),
                     ),
-                    Icon(Icons.favorite_border)
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/Hailselassie house.png"),
-                              fit: BoxFit.cover),
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.25,
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    "assets/images/Hailselassie house.png"),
-                                fit: BoxFit.cover),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(24)),
                           ),
-                        ),
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.25,
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    "assets/images/Hailselassie house.png"),
-                                fit: BoxFit.cover),
+                          builder: (context) => AddSheet(
+                            lat: widget.trip.coordinates.latitude,
+                            lng: widget.trip.coordinates.longitude,
+                            tripName: widget.trip.placeName,
                           ),
+                        );
+                      },
+                      icon: Icon(Icons.add_task, color: Colors.white),
+                      label: Text(
+                        'Add to plan',
+                        style: normalText.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.1,
                         ),
-                      ],
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        elevation: 6,
+                        shadowColor: primaryColor.withOpacity(0.3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 14),
+                        textStyle:
+                            normalText.copyWith(fontWeight: FontWeight.bold),
+                      ),
                     )
                   ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Text(
-                  "Selassie House",
-                  style: GoogleFonts.sora(fontWeight: FontWeight.bold),
                 ),
               ),
               Padding(
@@ -98,7 +211,7 @@ class ViewScreen extends StatelessWidget {
                       size: 15,
                     ),
                     Text(
-                      "Harar",
+                      widget.trip.location,
                       style: GoogleFonts.sora(
                           color: Colors.black.withOpacity(0.5), fontSize: 12),
                     )
@@ -133,12 +246,38 @@ class ViewScreen extends StatelessWidget {
                       height: MediaQuery.of(context).size.height * 0.4,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25)),
-                      child: FlutterMap(children: [
-                        TileLayer(
-                          urlTemplate:
-                              'https://api.maptiler.com/maps/basic-v2-dark/256/{z}/{x}/{y}.png?key=egOiZJUpRA3sNsKcxi0p',
+                      child: MapLibreMap(
+                        styleString:
+                            'https://api.maptiler.com/maps/0196d39b-1c1e-7bae-9032-c853a35836c1/style.json?key=egOiZJUpRA3sNsKcxi0p',
+                        initialCameraPosition: CameraPosition(
+                          target: widget.trip.coordinates,
+                          zoom: 15,
                         ),
-                      ]),
+                        onMapCreated: (controller) async {
+                          mapController = controller;
+                          if (mapController != null) {
+                            try {
+                              final ByteData bytes = await rootBundle
+                                  .load('assets/images/location.png');
+                              final Uint8List imageData =
+                                  bytes.buffer.asUint8List();
+                              await mapController!
+                                  .addImage("marker-custom", imageData);
+
+                              mapController!.addSymbol(
+                                SymbolOptions(
+                                  geometry: widget.trip.coordinates,
+                                  iconImage: "marker-custom",
+                                  iconSize: 0.1,
+                                  textOffset: const Offset(0, 1.5),
+                                ),
+                              );
+                            } catch (e) {
+                              debugPrint("Error adding custom marker: $e");
+                            }
+                          }
+                        },
+                      ),
                     ),
                     GestureDetector(
                       onTap: () {

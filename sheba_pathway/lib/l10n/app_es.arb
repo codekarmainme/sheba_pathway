@@ -1,0 +1,21 @@
+{
+  "welcomeBack": "¡Bienvenido de nuevo!",
+  "email": "correo electrónico",
+  "password": "contraseña",
+  "rememberMe": "Recuérdame",
+  "forgotPassword": "¿Olvidaste tu contraseña?",
+  "signIn": "Iniciar sesión",
+  "pleaseFillAllFields": "Por favor, complete todos los campos.",
+  "dontHaveAccount": "¿No tienes una cuenta?",
+  "signUpHere": "Regístrate aquí",
+  "start_unforgettable_trips": "Comienza tus viajes inolvidables",
+  "username": "Nombre de usuario",
+  "confirm_password": "Confirmar contraseña",
+  "sign_up": "Registrarse",
+  "password_does_not_match": "Las contraseñas no coinciden",
+  "signup_success": "Te has registrado exitosamente",
+  "do_you_have_account": "¿Ya tienes una cuenta?",
+  "sign_in_here": "Inicia sesión aquí",
+  "welcome_location_message": "Necesitamos tu ubicación para una mejor experiencia y resultados precisos de viajes y hoteles.",
+  "allow_location": "Permitir ubicación"
+}

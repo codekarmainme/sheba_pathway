@@ -1,0 +1,21 @@
+{
+  "welcomeBack": "مرحبًا بعودتك!",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "rememberMe": "تذكرني",
+  "forgotPassword": "هل نسيت كلمة المرور؟",
+  "signIn": "تسجيل الدخول",
+  "pleaseFillAllFields": "يرجى ملء جميع الحقول.",
+  "dontHaveAccount": "ليس لديك حساب؟",
+  "signUpHere": "سجل هنا",
+  "start_unforgettable_trips": "ابدأ رحلاتك التي لا تُنسى",
+  "username": "اسم المستخدم",
+  "confirm_password": "تأكيد كلمة المرور",
+  "sign_up": "إنشاء حساب",
+  "password_does_not_match": "كلمة المرور غير متطابقة",
+  "signup_success": "تم التسجيل بنجاح",
+  "do_you_have_account": "هل لديك حساب؟",
+  "sign_in_here": "سجّل الدخول هنا",
+    "welcome_location_message": "نحتاج إلى موقعك لتحسين تجربتك والحصول على نتائج دقيقة للرحلات والفنادق.",
+  "allow_location": "السماح بالموقع"
+}

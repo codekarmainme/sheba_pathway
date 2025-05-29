@@ -1,34 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:sheba_pathway/common/colors.dart';
 import 'package:sheba_pathway/common/typography.dart';
+import 'package:sheba_pathway/models/top_trips_model.dart';
 import 'package:sheba_pathway/provider/mapping_provider.dart';
+import 'package:sheba_pathway/screens/added_travel_plans.dart';
 import 'package:sheba_pathway/widgets/group_trip_container.dart';
 import 'package:sheba_pathway/widgets/top_trip_container.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:sheba_pathway/fake data/top_trips.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.currentPlaceName});
+  final String? currentPlaceName;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isFilterOpened=false;
-  void setisFilteredOpened(){
+  bool isFilterOpened = false;
+  String selectedCatagory = 'Lakes';
+  void setSelectedCatagory(String catagory) {
     setState(() {
-      isFilterOpened=!isFilterOpened;
-    });}
+      selectedCatagory = catagory;
+    });
+  }
+
+  final List<Map<String, dynamic>> _catagories = [
+    {
+      "catagory": 'Lakes',
+      "icon": FontAwesomeIcons.water,
+    },
+    {
+      "catagory": 'Castles',
+      "icon": FontAwesomeIcons.landmark,
+    },
+    {
+      "catagory": 'Mountains',
+      "icon": FontAwesomeIcons.mountain,
+    },
+    {
+      "catagory": 'Forest',
+      "icon": FontAwesomeIcons.tree,
+    }
+  ];
+  void setisFilteredOpened() {
+    setState(() {
+      isFilterOpened = !isFilterOpened;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: primaryColor, // Change this to your desired color
-        statusBarIconBrightness: Brightness.light, // or Brightness.dark
-      ),
-    );
+    
     return SafeArea(
       child: Scaffold(
         body: Consumer<MappingProvider>(
@@ -38,43 +65,119 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Location",
-                            style: normalText.copyWith(
-                                color: Colors.black.withOpacity(0.8)),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                color: Colors.black,
-                                size: 18,
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Location",
+                              style: normalText.copyWith(
+                                color: Colors.black.withOpacity(0.8),
                               ),
-                              Text(
-                                  mappingProvider.currentPlaceName ??
-                                      "Untracked",
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  color: black2,
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  widget.currentPlaceName ?? "",
                                   style: normalText.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))
-                            ],
-                          )
-                        ],
-                      ),
-                      Icon(
-                        Icons.notifications,
-                        color: Colors.black,
-                      )
-                    ],
-                  ),
-                ),
+                                    color: black2,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            // Added Plans Icon with Badge
+                            Stack(
+                              alignment: Alignment.topRight,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.event_note,
+                                      color: primaryColor, size: 28),
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>AddedTravelPlans()));
+                                  },
+                                  tooltip: "Added Plans",
+                                ),
+                                // Badge
+                                Positioned(
+                                  right: 6,
+                                  top: 6,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    constraints: const BoxConstraints(
+                                      minWidth: 16,
+                                      minHeight: 16,
+                                    ),
+                                    child: Text(
+                                      '3', // Replace with your dynamic plans count
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(width: 8),
+                            // Notifications Icon
+                            Stack(
+                              children: [
+                                IconButton(
+                                  icon: Icon(FontAwesomeIcons.bell,
+                                      color: black2, size: 22),
+                                  onPressed: () {},
+                                  tooltip: "Notifications",
+                                ),
+                                  Positioned(
+                                  right: 6,
+                                  top: 6,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    constraints: const BoxConstraints(
+                                      minWidth: 16,
+                                      minHeight: 16,
+                                    ),
+                                    child: Text(
+                                      '1', // Replace with your dynamic plans count
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -97,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               border: Border.all(
                                 color: Colors.black.withOpacity(0.5),
                               ),
-                              borderRadius: BorderRadius.circular(25),
+                              borderRadius: BorderRadius.circular(10),
                               color: Colors.black.withOpacity(0.1)),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
@@ -118,28 +221,29 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                       GestureDetector(onTap: setisFilteredOpened, child:Icon(Icons.tune)),
+                      GestureDetector(
+                          onTap: setisFilteredOpened, child: Icon(Icons.tune)),
                     ],
                   ),
                 ),
-                if(isFilterOpened)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 10,
-                ),
-                _buttonTune("Top rated", () {}),
-                SizedBox(
-                  width: 10,
-                ),
-                _buttonTune("Closest", () {}),
-                SizedBox(
-                  width: 10,
-                ),
-                _buttonTune("Open now", () {})
-              ],
-            ),
+                if (isFilterOpened)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      _buttonTune("Top rated", () {}),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      _buttonTune("Closest", () {}),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      _buttonTune("Open now", () {})
+                    ],
+                  ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -159,39 +263,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: [
-                      TopTripContainer(
-                        assetName: "assets/images/Hailselassie house.png",
-                        locaition: 'Harar',
-                        price: "ETB 4000",
-                        placeName: 'Selassie House',
-                      ),
-                      TopTripContainer(
-                        assetName:
-                            "assets/images/hararge traditional houses.png",
-                        locaition: 'Dire Dawa',
-                        price: "ETB 3000",
-                        placeName: 'Traditional Houses',
-                      ),
-                      TopTripContainer(
-                        assetName: "assets/images/jegol ginb.png",
-                        locaition: 'Harar',
-                        price: "ETB 4000",
-                        placeName: 'Gegol Castle',
-                      ),
-                      TopTripContainer(
-                        assetName: "assets/images/Midr babur.png",
-                        locaition: 'Dire Dawa',
-                        price: "ETB 4000",
-                        placeName: 'Metro',
-                      ),
-                      TopTripContainer(
-                        assetName: "assets/images/yedro midr babur.png",
-                        locaition: 'Dire Dawa',
-                        price: "ETB 4000",
-                        placeName: 'Old metro',
-                      ),
-                    ],
+                    children: topTrips
+                        .map((trip) => TopTripContainer(
+                              trip: trip,
+                            ))
+                        .toList(),
                   ),
                 ),
                 Padding(
@@ -213,121 +289,53 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Container(
                   height: 30,
-                  child: ListView(
+                  child: ListView.builder(
+                    itemCount: _catagories.length,
                     scrollDirection: Axis.horizontal,
-                    children: [
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        width: 100,
-                        decoration: BoxDecoration(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    itemBuilder: (context, index) {
+                      final catagory = _catagories[index];
+                      return GestureDetector(
+                        onTap: () {
+                          setSelectedCatagory(catagory['catagory']);
+                        },
+                        child: Container(
+                          width: 100,
+                          margin: EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
+                            color: catagory['catagory'] == selectedCatagory
+                                ? primaryColor
+                                : Colors.white,
                             border: Border.all(color: primaryColor, width: 1),
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.water,
-                              color: primaryColor,
-                              size: 16,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Text(
-                                "Lakes",
-                                style: normalText,
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FaIcon(
+                                catagory['icon'],
+                                color: catagory['catagory'] == selectedCatagory
+                                    ? Colors.white
+                                    : black2,
+                                size: 16,
                               ),
-                            )
-                          ],
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4.0),
+                                child: Text(
+                                  catagory['catagory'],
+                                  style: normalText.copyWith(
+                                      color: catagory['catagory'] ==
+                                              selectedCatagory
+                                          ? Colors.white
+                                          : black2),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: primaryColor, width: 1),
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.landmark,
-                              color: primaryColor,
-                              size: 16,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Text(
-                                "Castles",
-                                style: normalText,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: primaryColor, width: 1),
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.mountain,
-                              color: primaryColor,
-                              size: 16,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Text(
-                                "Mountain",
-                                style: normalText,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: primaryColor, width: 1),
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.tree,
-                              color: primaryColor,
-                              size: 16,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Text(
-                                "Forest",
-                                style: normalText,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
                 Padding(
@@ -351,22 +359,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Row(
                     children: [
                       TopTripContainer(
-                        assetName: "assets/images/lake tana.jpg",
-                        locaition: 'Bahir dar',
-                        price: "ETB 4000",
-                        placeName: 'Lake Tana',
+                        trip: TopTripsModel(
+                            assetName: "assets/images/lake tana.jpg",
+                            location: 'Bahir dar',
+                            price: "ETB 4000",
+                            placeName: 'Lake Tana',
+                            catagory: 'Lakes',
+                            coordinates: LatLng(11.6031, 37.3833)
+                            ),
                       ),
                       TopTripContainer(
-                        assetName: "assets/images/lake tana.jpg",
-                        locaition: 'Fikr hayq',
-                        price: "ETB 3000",
-                        placeName: 'Fikr Hayq',
+                        trip: TopTripsModel(
+                            assetName: "assets/images/lake tana.jpg",
+                            location: 'Fikr hayq',
+                            price: "ETB 3000",
+                            placeName: 'Fikr Hayq',
+                            catagory: 'Lakes',
+                            coordinates: LatLng(11.6031, 37.3833)
+                            
+                            ),
                       ),
                       TopTripContainer(
-                        assetName: "assets/images/lake tana.jpg",
-                        locaition: 'Langano',
-                        price: "ETB 4000",
-                        placeName: 'Arbamnich',
+                        trip: TopTripsModel(
+                            assetName: "assets/images/lake tana.jpg",
+                            location: 'Langano',
+                            price: "ETB 4000",
+                            placeName: 'Arbamnich',
+                            catagory: 'Lakes',
+                            coordinates: LatLng(11.6031, 37.3833)
+                            
+                            ),
                       ),
                     ],
                   ),
@@ -390,10 +412,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 GroupTripContainer(
-                    assetName: "assets/images/mountain.jpg",
-                    locaition: "Gondar",
-                    price: "ETB 3000",
-                    placeName: "Semein")
+                  assetName: "assets/images/mountain.jpg",
+                  locaition: "Gondar",
+                  price: "ETB 3000",
+                  placeName: "Semein",
+                  percentFilled: 0.6,
+                )
               ],
             ),
           );
@@ -401,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  
+
   Widget _buttonTune(String txt, VoidCallback callback) {
     return GestureDetector(
       onTap: callback,
@@ -412,15 +436,14 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Center(
             child: Text(
               txt,
-              style: normalText.copyWith(
-                  color: Colors.black),
+              style: normalText.copyWith(color: Colors.black),
             ),
           ),
         ),
         decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
-           ),
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+        ),
       ),
     );
   }

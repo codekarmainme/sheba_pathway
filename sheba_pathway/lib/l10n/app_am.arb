@@ -1,0 +1,22 @@
+{
+  "welcomeBack": "እንኳን ደህና መጡ!",
+  "email": "ኢሜይል",
+  "password": "የይለፍ ቃል",
+  "rememberMe": "አስታውሰኝ",
+  "forgotPassword": "የይለፍ ቃል ረሳሁ?",
+  "signIn": "ግባ",
+  "pleaseFillAllFields": "እባክዎ ሁሉንም መስኮቶች ይሙሉ።",
+  "dontHaveAccount": "መለያ የለዎትም?",
+  "signUpHere": "እዚህ ይመዝገቡ",
+  "start_unforgettable_trips": "የማይረሱ ጉዞዎችዎን ይጀምሩ",
+  "username": "የተጠቃሚ ስም",
+  "confirm_password": "የይለፍ ቃል ያረጋግጡ",
+  "sign_up": "ይመዝገቡ",
+  "password_does_not_match": "የይለፍ ቃል አይዛመድም",
+  "signup_success": "በትክክል ተመዝግበዋል",
+  "do_you_have_account": "መለያ አለዎት?",
+  "sign_in_here": "እዚህ ይግቡ",
+  "welcome_location_message": "የተሻለ ልምድ እና ትክክለኛ ውጤት ለመስጠት አካባቢዎን እንድናውቅ እንፈልጋለን።",
+  "allow_location": "አካባቢ ፍቀድ"
+  
+}

@@ -237,27 +237,27 @@ class _HotelContainerState extends State<HotelContainer> {
       onTap: callback,
       child: Container(
         height: 30,
-        child: Padding(
+        child:  Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 icon,
-                color: Colors.black,
+                color: Colors.white,
                 size: 15,
               ),
               Text(
                 txt,
-                style: normalText.copyWith(color: Colors.black),
+                style: normalText.copyWith(color: Colors.white),
               ),
             ],
           ),
         ),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: primaryColor,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: black2, width: 2)),
+            ),
       ),
     );
   }
