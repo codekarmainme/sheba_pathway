@@ -36,9 +36,10 @@ class _ViewScreenState extends State<ViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -157,9 +158,12 @@ class _ViewScreenState extends State<ViewScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      widget.trip.placeName,
-                      style: GoogleFonts.sora(fontWeight: FontWeight.bold),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: Text(
+                        widget.trip.placeName,
+                        style: GoogleFonts.sora(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     ElevatedButton.icon(
                       onPressed: () {
@@ -193,7 +197,7 @@ class _ViewScreenState extends State<ViewScreen> {
                           borderRadius: BorderRadius.circular(14),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 14),
+                            horizontal: 10, vertical: 14),
                         textStyle:
                             normalText.copyWith(fontWeight: FontWeight.bold),
                       ),

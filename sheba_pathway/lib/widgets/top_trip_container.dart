@@ -4,23 +4,43 @@ import 'package:sheba_pathway/common/colors.dart';
 import 'package:sheba_pathway/common/typography.dart';
 import 'package:sheba_pathway/models/top_trips_model.dart';
 import 'package:sheba_pathway/screens/view_screen.dart';
+import 'package:sheba_pathway/widgets/toast.dart';
 
-class TopTripContainer extends StatelessWidget {
+class TopTripContainer extends StatefulWidget {
   const TopTripContainer({
     super.key,
     required this.trip,
-    
   });
 
   final TopTripsModel trip;
-  
+
+  @override
+  State<TopTripContainer> createState() => _TopTripContainerState();
+}
+
+class _TopTripContainerState extends State<TopTripContainer> {
+  bool isFavorite = false;
+  void toggleFavorite() {
+    setState(() {
+      isFavorite = !isFavorite;
+      if (isFavorite) {
+        showSuccessToast('Added to favorites');
+      } else {
+        showSuccessToast('Removed from favorites');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ViewScreen(trip: trip,)));
+            context,
+            MaterialPageRoute(
+                builder: (context) => ViewScreen(
+                      trip: widget.trip,
+                    )));
       },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.48,
@@ -41,11 +61,12 @@ class TopTripContainer extends StatelessWidget {
           children: [
             // Image with rounded corners
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: Image.asset(
-                  trip.assetName,
+                  widget.trip.assetName,
                   fit: BoxFit.cover,
                   width: double.infinity,
                 ),
@@ -62,7 +83,7 @@ class TopTripContainer extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          trip.placeName,
+                          widget.trip.placeName,
                           style: normalText.copyWith(
                             color: black2,
                             fontWeight: FontWeight.bold,
@@ -74,7 +95,7 @@ class TopTripContainer extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                           Icon(Icons.star, color: purpleColor, size: 16),
+                          Icon(Icons.star, color: purpleColor, size: 16),
                           const SizedBox(width: 2),
                           Text(
                             "4.5",
@@ -99,7 +120,7 @@ class TopTripContainer extends StatelessWidget {
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          trip.location,
+                          widget.trip.location,
                           style: normalText.copyWith(
                             color: Colors.black.withOpacity(0.5),
                           ),
@@ -115,7 +136,7 @@ class TopTripContainer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        trip.price,
+                        widget.trip.price,
                         style: normalText.copyWith(
                           color: primaryColor,
                           fontWeight: FontWeight.bold,
@@ -124,14 +145,11 @@ class TopTripContainer extends StatelessWidget {
                       ),
                       IconButton(
                         icon: Icon(
-                          FontAwesomeIcons.heart,
-                          color: primaryColor,
+                          FontAwesomeIcons.solidHeart,
+                          color: isFavorite ? successColor : grey1,
                           size: 18,
                         ),
-                        onPressed: () {
-                          // TODO: Handle favorite action
-                        },
-                        splashRadius: 18,
+                        onPressed: toggleFavorite,
                       ),
                     ],
                   ),

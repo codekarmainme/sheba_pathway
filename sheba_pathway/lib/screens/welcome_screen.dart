@@ -35,7 +35,7 @@ class WelcomeScreen extends StatelessWidget {
                );
             }
             if(state is CurrentLocationSuccessState){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainNavigator(currentPlaceName: state.placeName,)));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainNavigator(currentPlaceName: state.place['placeName'],)));
             }
             if(state is CurrentLocationErrorState){
               ScaffoldMessenger.of(context).showSnackBar(

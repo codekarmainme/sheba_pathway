@@ -13,6 +13,8 @@ import 'package:sheba_pathway/screens/signup_screen.dart';
 import 'package:sheba_pathway/screens/welcome_screen.dart';
 import 'package:sheba_pathway/widgets/language_selector.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sheba_pathway/widgets/loading_progress.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -42,14 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext context) {
-                  return Center(
-                    child: LoadingAnimationWidget.discreteCircle(
-                      color: successColor,
-                      secondRingColor: warningColor,
-                      thirdRingColor: errorColor,
-                      size: 50,
-                    ),
-                  );
+                  return loadingProgress(context);
                 },
               );
             } else {
@@ -60,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   MaterialPageRoute(builder: (context) => WelcomeScreen()));
             }
             if (state is LoginErrorState) {
+              print(state.error);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                   state.error,
@@ -181,9 +177,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<LoginBloc>().add(SigninWithGoogle());
+                        },
                         icon:
-                            Icon(Icons.facebook_outlined, color: Colors.black),
+                            Icon(FontAwesomeIcons.google, color: Colors.black),
                         style:
                             IconButton.styleFrom(backgroundColor: Colors.white),
                       ),

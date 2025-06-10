@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:sheba_pathway/bloc/current_location/current_location_state.dart';
 import 'package:sheba_pathway/bloc/hotel_bloc/all_hotels_widget/all_hotels_bloc.dart';
 import 'package:sheba_pathway/bloc/hotel_bloc/all_hotels_widget/all_hotels_event.dart';
 import 'package:sheba_pathway/bloc/hotel_bloc/all_hotels_widget/all_hotels_state.dart';
 import 'package:sheba_pathway/common/typography.dart';
-import 'package:sheba_pathway/provider/mapping_provider.dart';
 import 'package:sheba_pathway/widgets/hotel_container.dart';
 import 'package:sheba_pathway/widgets/shimmer_container.dart';
 import 'package:sheba_pathway/common/colors.dart';
+import 'package:sheba_pathway/bloc/current_location/current_location_bloc.dart';
 
 class HotelScreen extends StatefulWidget {
   const HotelScreen({super.key});
@@ -28,9 +29,23 @@ class _HotelScreenState extends State<HotelScreen> {
   }
 
   void determineAndLoadHotels() async {
-    final mappingProvider =
-        Provider.of<MappingProvider>(context, listen: false);
-    currentPosition = await mappingProvider.determinePosition(context);
+    final state = await context.read<CurrentLocationBloc>().state;
+    if (state is CurrentLocationSuccessState) {
+      currentPosition = Position(
+        latitude: state.place['position'].latitude,
+        longitude: state.place['position'].longitude,
+        accuracy: 0.0,
+        altitude: 0.0,
+        speed: 0.0,
+        altitudeAccuracy: 0.0,
+        heading: 0.0,
+        headingAccuracy: 0.0,
+        speedAccuracy: 0.0,
+        timestamp: DateTime.now(),
+
+
+      );
+    }
     if (currentPosition != null) {
       context.read<AllHotelsBloc>().add(LoadAllHotels(
           currentPosition!.latitude, currentPosition!.longitude, 1000));

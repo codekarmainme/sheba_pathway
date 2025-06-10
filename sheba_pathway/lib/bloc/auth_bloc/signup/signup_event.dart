@@ -6,7 +6,8 @@ abstract class SignupEvent extends Equatable{
 class SignupSubmit extends SignupEvent{
   final String email;
   final String password;
-  SignupSubmit(this.email, this.password);
+  final String username;
+  SignupSubmit(this.email, this.password,this.username);
   @override
   List<Object?> get props => [email,password];
 }

@@ -54,16 +54,14 @@ class _YouScreenState extends State<YouScreen> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => SettingScreen()));
               },
-              icon: Icon(Icons.settings, color: black2),
+              icon: Icon(Icons.settings, color:  black2.withOpacity(0.5)),
             ),
           ],
           automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
-
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-          
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Align(
                 alignment: Alignment.topCenter,
@@ -80,7 +78,7 @@ class _YouScreenState extends State<YouScreen> {
                         right: 0,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white, // Background color for the icon
+                            color: whiteColor, // Background color for the icon
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -132,7 +130,7 @@ class _YouScreenState extends State<YouScreen> {
                         border: catagory == _selectedCatagory
                             ? Border(
                                 bottom: BorderSide(
-                                  color: black2,
+                                  color: successColor,
                                   width: 3,
                                 ),
                               )
@@ -141,16 +139,14 @@ class _YouScreenState extends State<YouScreen> {
                       child: Text(
                         catagory['name'],
                         style: normalText.copyWith(
-                            color: black2, fontWeight: FontWeight.bold),
+                            color:  black2, fontWeight: FontWeight.bold),
                       ),
                     ),
                   );
                 }).toList(),
               ),
               Divider(),
-              SizedBox(
-                height: 400,
-                child: _selectedCatagory['section'])
+              SizedBox(height: 400, child: _selectedCatagory['section'])
             ],
           ),
         ),
@@ -171,7 +167,7 @@ class _YouScreenState extends State<YouScreen> {
               children: [
                 Container(
                     decoration: BoxDecoration(
-                        color: secondaryColor, shape: BoxShape.circle),
+                        color: successColor, shape: BoxShape.circle),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(
@@ -182,7 +178,7 @@ class _YouScreenState extends State<YouScreen> {
                     )),
                 Text(text,
                     style: smallText.copyWith(
-                        color: secondaryColor, fontWeight: FontWeight.bold))
+                        color: black2, fontWeight: FontWeight.bold))
               ],
             ),
           ),

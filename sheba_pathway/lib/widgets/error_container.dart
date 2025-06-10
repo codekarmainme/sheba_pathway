@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ErrorContainer extends StatelessWidget {
-  const ErrorContainer({super.key, required this.message, required this.title});
+  const ErrorContainer({super.key, required this.message, required this.title,this.retryCallback});
  final String title;
  final String message;
+ final VoidCallback? retryCallback;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -40,9 +41,7 @@ class ErrorContainer extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               ElevatedButton.icon(
-                onPressed: () {
-                  // Optionally add a retry callback
-                },
+                onPressed: retryCallback,
                 icon: Icon(Icons.refresh, color: Colors.white),
                 label: Text("Retry"),
                 style: ElevatedButton.styleFrom(

@@ -1,127 +1,120 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sheba_pathway/bloc/auth_bloc/signout/signout_bloc.dart';
+import 'package:sheba_pathway/bloc/auth_bloc/signout/signout_event.dart';
+import 'package:sheba_pathway/bloc/auth_bloc/signout/signout_state.dart';
 import 'package:sheba_pathway/common/colors.dart';
 import 'package:sheba_pathway/common/typography.dart';
+import 'package:sheba_pathway/screens/login_screen.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
+  void _signOut(BuildContext context) {
+    context.read<SignOutBloc>().add(SignOutRequested());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: black2,
       appBar: AppBar(
         title: Text(
           'Settings',
-          style: heading5.copyWith(color: Colors.white),
+          style: mediumText.copyWith(
+              color: whiteColor, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: primaryColor,
+        backgroundColor: black2,
         centerTitle: true,
+        iconTheme: IconThemeData(color: whiteColor),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          // Theme Switch
           ListTile(
-            leading: Icon(Icons.brightness_6, color: primaryColor),
+            leading: Icon(Icons.brightness_6, color: successColor),
             title: Text(
               'Light Theme',
-              style: normalText.copyWith(color: black2),
+              style: normalText.copyWith(color: whiteColor),
             ),
             trailing: Switch(
-              value: false, // Placeholder value
-              onChanged: (value) {}, // Placeholder callback
+              activeColor: successColor,
+              value: false,
+              onChanged: (value) {},
             ),
           ),
           const Divider(),
 
-          // Language Selection
           ListTile(
-            leading: Icon(Icons.language, color: primaryColor),
+            leading: Icon(Icons.language, color: successColor),
             title: Text(
               'Language',
-              style: normalText.copyWith(color: black2),
+              style: normalText.copyWith(color: whiteColor),
             ),
             trailing: Text(
-              'English', // Placeholder value
-              style: normalText.copyWith(color: black2.withOpacity(0.7)),
+              'English',
+              style: normalText.copyWith(color: whiteColor.withOpacity(0.7)),
             ),
-            onTap: () {
-              // Placeholder callback
-            },
+            onTap: () {},
           ),
           const Divider(),
-
-          // Notifications
           ListTile(
-            leading: Icon(Icons.notifications, color: primaryColor),
+            leading: Icon(Icons.notifications, color: successColor),
             title: Text(
               'Notifications',
-              style: normalText.copyWith(color: black2),
+              style: normalText.copyWith(color: whiteColor),
             ),
             trailing: Switch(
-              value: true, // Placeholder value
-              onChanged: (value) {}, // Placeholder callback
+              activeColor: successColor,
+              value: true,
+              onChanged: (value) {},
             ),
           ),
           const Divider(),
 
-          // Account Settings
           ListTile(
-            leading: Icon(Icons.person, color: primaryColor),
+            leading: Icon(Icons.person, color: successColor),
             title: Text(
               'Account Settings',
-              style: normalText.copyWith(color: black2),
+              style: normalText.copyWith(color: whiteColor),
             ),
-            onTap: () {
-              // Placeholder callback
-            },
+            onTap: () {},
           ),
           const Divider(),
 
-          // Privacy Policy
           ListTile(
-            leading: Icon(Icons.privacy_tip, color: primaryColor),
+            leading: Icon(Icons.privacy_tip, color: successColor),
             title: Text(
               'Privacy Policy',
-              style: normalText.copyWith(color: black2),
+              style: normalText.copyWith(color: whiteColor),
             ),
-            onTap: () {
-              // Placeholder callback
-            },
+            onTap: () {},
           ),
           const Divider(),
-
-          // About
           ListTile(
-            leading: Icon(Icons.info, color: primaryColor),
+            leading: Icon(Icons.info, color: successColor),
             title: Text(
               'About',
-              style: normalText.copyWith(color: black2),
+              style: normalText.copyWith(color: whiteColor),
             ),
-            onTap: () {
-              // Placeholder callback
-            },
+            onTap: () {},
           ),
           const Divider(),
-
-          // Help & Support
           ListTile(
-            leading: Icon(Icons.help, color: primaryColor),
+            leading: Icon(Icons.help, color: successColor),
             title: Text(
               'Help & Support',
-              style: normalText.copyWith(color: black2),
+              style: normalText.copyWith(color: whiteColor),
             ),
-            onTap: () {
-              // Placeholder callback
-            },
+            onTap: () {},
           ),
           const Divider(),
 
-          // Terms & Conditions
           ListTile(
-            leading: Icon(Icons.article, color: primaryColor),
+            leading: Icon(Icons.article, color: successColor),
             title: Text(
               'Terms & Conditions',
-              style: normalText.copyWith(color: black2),
+              style: normalText.copyWith(color: whiteColor),
             ),
             onTap: () {
               // Placeholder callback
@@ -130,16 +123,39 @@ class SettingScreen extends StatelessWidget {
           const Divider(),
 
           // Logout
-          ListTile(
-            leading: Icon(Icons.logout, color: Colors.red),
-            title: Text(
-              'Logout',
-              style: normalText.copyWith(color: Colors.red),
-            ),
-            onTap: () {
-              // Placeholder callback
-            },
-          ),
+          BlocConsumer<SignOutBloc, SignOutState>(listener: (context, state) {
+            if (state is SignOutLoading) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return Center(
+                    child: LoadingAnimationWidget.discreteCircle(
+                      color: successColor,
+                      secondRingColor: warningColor,
+                      thirdRingColor: errorColor,
+                      size: 50,
+                    ),
+                  );
+                },
+              );
+            }
+            if (state is SignOutSuccess) {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()));
+            }
+          }, builder: (context, sate) {
+            return ListTile(
+              leading: Icon(Icons.logout, color: errorColor),
+              title: Text(
+                'Logout',
+                style: normalText.copyWith(color: errorColor),
+              ),
+              onTap: () {
+                _signOut(context);
+              },
+            );
+          }),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sheba_pathway/bloc/auth_bloc/login/login_bloc.dart';
+import 'package:sheba_pathway/bloc/auth_bloc/signout/signout_bloc.dart';
 import 'package:sheba_pathway/bloc/auth_bloc/signup/signup_bloc.dart';
 import 'package:sheba_pathway/bloc/current_location/current_location_bloc.dart';
 import 'package:sheba_pathway/bloc/mapping_bloc/cost_model/cost_model_bloc.dart';
@@ -9,15 +10,13 @@ import 'package:sheba_pathway/bloc/mapping_bloc/mapping_bloc.dart';
 import 'package:sheba_pathway/bloc/mapping_bloc/stream_position/stream_position_bloc.dart';
 import 'package:sheba_pathway/bloc/payment_bloc/payment_blocs.dart';
 import 'package:sheba_pathway/common/colors.dart';
-import 'package:sheba_pathway/provider/mapping_provider.dart';
 import 'package:sheba_pathway/repository/auth_repository.dart';
+import 'package:sheba_pathway/repository/blog_repository.dart';
 import 'package:sheba_pathway/repository/mapping_repository.dart';
 import 'package:sheba_pathway/repository/payment_repository.dart';
 import 'package:sheba_pathway/repository/travel_plans_repository.dart';
 import 'package:sheba_pathway/screens/added_travel_plans.dart';
 import 'package:sheba_pathway/screens/login_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:sheba_pathway/provider/hotel_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +28,7 @@ import 'package:sheba_pathway/bloc/travel_plans_bloc/travel_plans_bloc.dart';
 import 'package:sheba_pathway/repository/hotel_picker_repository.dart';
 import 'package:sheba_pathway/bloc/hotel_picker_bloc/hotel_picker_bloc.dart';
 import 'package:chapa_unofficial/chapa_unofficial.dart';
-
+import 'package:sheba_pathway/bloc/blog_bloc/blog_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -38,10 +37,13 @@ void main() async {
   await dotenv.load(fileName: 'assets/.env');
   Chapa.configure(privateKey: "CHASECK_TEST-lgM28ptmhS7NkrDSb1dx89j5YNBKRC72");
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => MappingProvider()),
-    ChangeNotifierProvider(create: (_) => HotelProvider())
-  ], child: MyApp()));
+  runApp(RepositoryProvider(
+      create: (_) => BlogRepository(),
+      child: BlocProvider(
+        create: (context) => BlogBloc(context.read<BlogRepository>()),
+        child: MyApp(),
+      ),
+    ),);
 }
 
 class MyApp extends StatefulWidget {
@@ -71,6 +73,7 @@ class _MyAppState extends State<MyApp> {
     final PaymentRepository paymentRepository = PaymentRepository();
     final TravelPlansRepository travelPlansRepository = TravelPlansRepository();
     final HotelPickerRepository hotelPickerRepository = HotelPickerRepository();
+    final BlogRepository blogRepository = BlogRepository();
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => SignupBloc(authRepository)),
@@ -94,6 +97,12 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (_) => HotelPickerBloc(hotelPickerRepository),
+        ),
+        BlocProvider(
+          create: (_) => SignOutBloc(authRepository),
+        ),
+        BlocProvider(
+          create: (_) => BlogBloc(blogRepository),
         )
       ],
       child: MaterialApp(

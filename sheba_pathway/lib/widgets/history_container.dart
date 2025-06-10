@@ -18,7 +18,7 @@ class HistoryContainer extends StatelessWidget {
           children: [
             Text(historyname,style: normalText.copyWith(color: black2,fontWeight: FontWeight.bold),),
             Text(date,style: smallText.copyWith(color: black2.withOpacity(0.5)),),
-            Text("Not rated",style: smallText,),
+            Text("Not rated",style: smallText.copyWith(color:black2),),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

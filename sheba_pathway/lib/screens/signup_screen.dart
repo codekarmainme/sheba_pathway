@@ -102,6 +102,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
+                     
                     if (usernameController.text.isEmpty ||
                         emailController.text.isEmpty ||
                         passwordController.text.isEmpty ||
@@ -124,7 +125,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     }
                     context.read<SignupBloc>().add(SignupSubmit(
                         emailController.text.trim(),
-                        passwordController.text.trim()));
+                        passwordController.text.trim(),
+                        usernameController.text.trim()
+                        ));
+                       
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.7,

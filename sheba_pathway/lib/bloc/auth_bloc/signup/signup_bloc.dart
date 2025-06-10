@@ -9,7 +9,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState>{
     on<SignupSubmit>((event, emit)async{
       emit(SignupLoading());
     try{
-      await authRepository.signup(email: event.email,password: event.password);
+      await authRepository.signup(email: event.email,password: event.password,username: event.username);
       emit(SignupSucesss());
     }
     catch(e){

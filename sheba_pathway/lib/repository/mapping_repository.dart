@@ -20,7 +20,7 @@ class MappingRepository {
     }
   }
 
-  Future<String> determinePosition(BuildContext context) async {
+  Future<Map<String,dynamic>> determinePosition(BuildContext context) async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -48,7 +48,13 @@ class MappingRepository {
       desiredAccuracy: LocationAccuracy.high,
     );
     String placeName = await determinePlaceName(_currentPosition);
-    return placeName;
+    return {
+      'placeName':placeName,
+      'position':LatLng(
+        _currentPosition.latitude,
+        _currentPosition.longitude
+      )
+    };
   }
 
   Future<void> _showLocationServiceDialog(BuildContext context) async {

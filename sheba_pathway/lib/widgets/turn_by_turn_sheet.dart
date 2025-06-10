@@ -1,15 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sheba_pathway/bloc/mapping_bloc/mapping_bloc.dart';
-import 'package:sheba_pathway/bloc/mapping_bloc/mapping_event.dart';
 import 'package:sheba_pathway/bloc/mapping_bloc/mapping_state.dart';
 import 'package:sheba_pathway/common/colors.dart';
 import 'package:sheba_pathway/common/typography.dart';
-import 'package:sheba_pathway/provider/mapping_provider.dart';
 import 'package:sheba_pathway/screens/home_screen.dart';
 import 'package:sheba_pathway/widgets/turn_container.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:intl/intl.dart';
 
 class TurnByTurnModal extends StatefulWidget {

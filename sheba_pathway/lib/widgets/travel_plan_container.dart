@@ -61,12 +61,13 @@ class _TravelPlanContainerState extends State<TravelPlanContainer> {
                         Row(
                           children: [
                             Icon(Icons.flight_takeoff,
-                                color: primaryColor, size: 22),
+                                color: successColor, size: 22),
                             Text(
                               widget.tripDestination,
                               style: normalText.copyWith(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 17,
+                                color: black2
                               ),
                             ),
                           ],

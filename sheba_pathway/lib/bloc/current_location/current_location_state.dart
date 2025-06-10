@@ -1,25 +1,24 @@
 import 'package:equatable/equatable.dart';
 
-abstract class CurrentLocationState extends Equatable{
+abstract class CurrentLocationState extends Equatable {
   @override
-  List<Object?> get props =>[];
+  List<Object?> get props => [];
 }
 
-class CurrentLocationIntialState extends CurrentLocationState{}
+class CurrentLocationIntialState extends CurrentLocationState {}
 
-class CurrentLocationLoadingState extends CurrentLocationState{}
+class CurrentLocationLoadingState extends CurrentLocationState {}
 
-class CurrentLocationSuccessState extends CurrentLocationState{
-  final String placeName;
-  CurrentLocationSuccessState({required this.placeName});
+class CurrentLocationSuccessState extends CurrentLocationState {
+  final Map<String, dynamic> place;
+  CurrentLocationSuccessState({required this.place});
   @override
-  List<Object?> get props => [placeName];
+  List<Object?> get props => [place];
 }
 
-class CurrentLocationErrorState extends CurrentLocationState{
+class CurrentLocationErrorState extends CurrentLocationState {
   final String error;
   CurrentLocationErrorState({required this.error});
   @override
   List<Object?> get props => [error];
 }
-

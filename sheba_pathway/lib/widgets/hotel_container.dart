@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sheba_pathway/common/colors.dart';
 import 'package:sheba_pathway/common/typography.dart';
-import 'package:sheba_pathway/provider/mapping_provider.dart';
 import 'package:sheba_pathway/screens/map_screen.dart';
 import 'package:sheba_pathway/widgets/review_container.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -56,7 +55,6 @@ class _HotelContainerState extends State<HotelContainer> {
   }
   @override
   Widget build(BuildContext context) {
-  final mappingProvider=Provider.of<MappingProvider>(context,listen: false);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -193,16 +191,9 @@ class _HotelContainerState extends State<HotelContainer> {
               child: Row(
                 children: [
                   _button('Start', Icons.navigation, () {
-                    print(mappingProvider.selectedStartlocation);
+                    
                     print("${[widget.lat,widget.long]} hotel adress");
-                    mappingProvider.setselectedDestinationLocation([
-                      {
-                      "name":widget.name,
-                      },
-                      {
-                        'coordinates':[widget.lat,widget.long]
-                      }
-                    ]);
+                    
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>MapScreen()));
                   }),
                   SizedBox(width: 5,),

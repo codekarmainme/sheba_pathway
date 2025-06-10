@@ -16,5 +16,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginErrorState(e.toString()));
       }
     });
-  }
+    
+    on<SigninWithGoogle>((event, emit) async {
+      emit(LoginloadingState());
+      try {
+        await authRepository.signInWithGoogle();
+        emit(LoginSucessState());
+      } catch (e) {
+        emit(LoginErrorState(e.toString()));
+      }
+    });
+  
+}
 }

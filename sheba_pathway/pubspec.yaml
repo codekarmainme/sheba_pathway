@@ -60,6 +60,10 @@ dependencies:
   chapasdk: ^0.0.7+1
   intl_phone_field: ^3.2.0
   chapa_unofficial: ^0.0.5
+  google_nav_bar: ^5.0.7
+  google_sign_in: ^6.3.0
+  image_picker: ^1.1.2
+  fluttertoast: ^8.2.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -113,6 +117,19 @@ flutter:
     - assets/images/hotel.png
     - assets/images/blog1.jpg
     - assets/images/blog2.jpg
+    - assets/images/amora gedel park.jpg
+    - assets/images/axum.jpg
+    - assets/images/entoto park.jpg
+    - assets/images/Fasil.jpg
+    - assets/images/lake hawasa.jpg
+    - assets/images/lake tana b.jpg
+    - assets/images/lalibela.jpg
+    - assets/images/national museum lucy.jpg
+    - assets/images/Queen of Sheba.jpg
+    - assets/images/selassie church.jpg
+    - assets/images/nile fall.jpg
+    - assets/images/20 % siscount.png
+    - assets/images/Family package.png
     
     
 

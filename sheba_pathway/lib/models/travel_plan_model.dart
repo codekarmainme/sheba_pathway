@@ -14,8 +14,10 @@ class TripPlanModel {
   final DateTime createdAt;
   final bool isPaid;
   final LatLng hotelCoordinate;
+  final String userId;
   TripPlanModel({
     this.id,
+    required this.userId,
     required this.destinationName,
     required this.tripDate,
     required this.hotel,
@@ -42,7 +44,8 @@ class TripPlanModel {
         "purposeOfTrip": purposeOfTrip,
         "createdAt": createdAt.toIso8601String(),
         'hotelCoordinate':GeoPoint(hotelCoordinate.latitude, hotelCoordinate.longitude),
-        'isPaid':isPaid
+        'isPaid':isPaid,
+        "userId": userId,
       };
 
   // For retrieving from API (fromJson)
@@ -64,5 +67,6 @@ class TripPlanModel {
                 (json['hotelCoordinate'] as GeoPoint).longitude,
               )
             : LatLng(0, 0),
+       userId: json['userId'] ?? ''    
       );
 }

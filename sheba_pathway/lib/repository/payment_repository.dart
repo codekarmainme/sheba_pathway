@@ -2,7 +2,7 @@ import 'package:chapasdk/chapasdk.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:chapasdk/features/native-checkout/chapa_native_payment.dart';
+import 'package:sheba_pathway/common/colors.dart';
 class PaymentRepository {
   Future<void> processPayment(
       final BuildContext context,
@@ -20,7 +20,7 @@ class PaymentRepository {
     try{
       await Chapa.paymentParameters(
       context: context,
-      publicKey: 'CHAPUBK_TEST-9uxNcKzrZ3vIvPvJK3tpw2DJyrPd5ZOc',
+      publicKey: chapakey,
       currency: 'ETB',
       amount: amount.toString(),
       email: email,
@@ -33,7 +33,9 @@ class PaymentRepository {
       namedRouteFallBack: '/added_travel_plans',
       nativeCheckout: true,
       availablePaymentMethods: ['mpesa','telebirr'],
-      
+     buttonColor: primaryColor,
+     showPaymentMethodsOnGridView: true,
+            
     );
     
     await FirebaseFirestore.instance

@@ -13,7 +13,7 @@ class TravelPlansBloc extends Bloc<TravelPlansEvent, TravelPlansState> {
       emit(TravelPlansLoading());
       try {
         await emit.forEach<List<TripPlanModel>>(
-          repository.getTripPlans(),
+          repository.getUserTravelPlans(),
           onData: (plans) => TravelPlansLoaded(plans),
           onError: (_, error) {
             print('TravelPlansBloc error: $error');

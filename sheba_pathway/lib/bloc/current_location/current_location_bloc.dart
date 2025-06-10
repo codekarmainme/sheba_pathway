@@ -9,8 +9,8 @@ class CurrentLocationBloc extends Bloc<CurrentLocationEvent,CurrentLocationState
     on<DeterrminePositionEvent>((event, emit)async{
     emit(CurrentLocationLoadingState());
     try{
-      String placeName= await mappingRepository.determinePosition(event.context);
-      emit(CurrentLocationSuccessState(placeName: placeName));
+      Map<String,dynamic> place= await mappingRepository.determinePosition(event.context);
+      emit(CurrentLocationSuccessState(place: place));
     }
     catch(e){
       emit(CurrentLocationErrorState(error: e.toString()));

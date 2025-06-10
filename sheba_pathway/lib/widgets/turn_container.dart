@@ -1,6 +1,5 @@
 import 'package:sheba_pathway/common/colors.dart';
 import 'package:sheba_pathway/common/typography.dart';
-import 'package:sheba_pathway/provider/mapping_provider.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_tts/flutter_tts.dart';
 
@@ -121,9 +120,7 @@ class _TurnContainerState extends State<TurnContainer>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MappingProvider>(
-      builder: (context, mappingProvider, child) {
-        return Padding(
+    return  Padding(
           padding: const EdgeInsets.all(8.0),
           child:Container(
                 width: MediaQuery.of(context).size.width * 0.6,
@@ -165,7 +162,6 @@ class _TurnContainerState extends State<TurnContainer>
               
           ),
         );
-      },
-    );
+      
   }
 }

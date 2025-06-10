@@ -13,3 +13,4 @@ final black2=Color.fromRGBO(29,29,29,1);
 final black3=Color.fromRGBO(40,40,40,1);
 final grey1=Color.fromRGBO(187, 185, 185, 0.973);
 final restaurantColor=const Color.fromARGB(255, 239, 125, 4);
+final whiteColor=Color.fromARGB(255, 246, 244, 243);

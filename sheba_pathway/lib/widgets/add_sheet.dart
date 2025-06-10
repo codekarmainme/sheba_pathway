@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:sheba_pathway/bloc/travel_plans_bloc/travel_plans_event.dart';
@@ -219,25 +220,43 @@ class _AddSheetState extends State<AddSheet> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        final user = FirebaseAuth.instance.currentUser;
+                        if (user == null) {
+                          // Handle not logged in
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                backgroundColor: Colors.white,
+                                content: Text(
+                                  'You must be logged in to add a trip plan.',
+                                  style: normalText.copyWith(color: errorColor),
+                                )),
+                          );
+                          return;
+                        }
                         if (datecontroller.text.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text('Please select a trip date',style: normalText.copyWith(color: errorColor))),
+                                content: Text('Please select a trip date',
+                                    style: normalText.copyWith(
+                                        color: errorColor))),
                           );
                           return;
                         }
                         if (phonenumbercontroller.text.isEmpty ||
                             phonenumbercontroller.text.length < 9) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            
                             SnackBar(
-                              backgroundColor: Colors.white,
-                                content:
-                                    Text('Please enter a valid phone number',style: normalText.copyWith(color: errorColor),)),
+                                backgroundColor: Colors.white,
+                                content: Text(
+                                  'Please enter a valid phone number',
+                                  style: normalText.copyWith(color: errorColor),
+                                )),
                           );
                           return;
                         }
+
                         final plan = TripPlanModel(
+                            userId: user.uid,
                             destinationName: widget.tripName,
                             tripDate: DateTime.parse(datecontroller.text),
                             hotel: hotelcontroller.text,
@@ -250,7 +269,8 @@ class _AddSheetState extends State<AddSheet> {
                             phoneNumber: phonenumbercontroller.text,
                             purposeOfTrip: purposeoftripcontroller.text,
                             isPaid: false,
-                            hotelCoordinate: selectedhotelCoordinate ??LatLng(widget.lat, widget.lng));
+                            hotelCoordinate: selectedhotelCoordinate ??
+                                LatLng(widget.lat, widget.lng));
 
                         context
                             .read<TravelPlansBloc>()
