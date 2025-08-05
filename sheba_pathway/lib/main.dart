@@ -21,7 +21,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sheba_pathway/l10n/app_localizations.dart';
 import 'package:sheba_pathway/bloc/mapping_bloc/fetchlocationsearchresult/bloc/fetchlocationsearchresult_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sheba_pathway/bloc/travel_plans_bloc/travel_plans_bloc.dart';

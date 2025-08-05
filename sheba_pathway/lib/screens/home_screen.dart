@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:sheba_pathway/common/colors.dart';
 import 'package:sheba_pathway/common/typography.dart';
 import 'package:sheba_pathway/screens/added_travel_plans.dart';
+import 'package:sheba_pathway/widgets/discount_section.dart';
 import 'package:sheba_pathway/widgets/group_trip_container.dart';
 import 'package:sheba_pathway/widgets/top_trip_container.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sheba_pathway/fake data/top_trips.dart';
 import 'package:sheba_pathway/screens/trip_search_screen.dart';
 import 'package:sheba_pathway/fake data/all_trips.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.currentPlaceName});
   final String? currentPlaceName;
@@ -258,6 +260,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 _buttonTune("Open now", () {})
               ],
             ),
+          DiscountSection(
+            onTap: (index) {
+              if (index == 0) {
+              } else if (index == 1) {}
+            },
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(

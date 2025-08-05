@@ -12,7 +12,7 @@ import 'package:sheba_pathway/common/typography.dart';
 import 'package:sheba_pathway/screens/signup_screen.dart';
 import 'package:sheba_pathway/screens/welcome_screen.dart';
 import 'package:sheba_pathway/widgets/language_selector.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sheba_pathway/l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sheba_pathway/widgets/loading_progress.dart';
 class LoginScreen extends StatefulWidget {

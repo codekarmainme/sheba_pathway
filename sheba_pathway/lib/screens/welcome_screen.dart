@@ -8,7 +8,7 @@ import 'package:sheba_pathway/screens/main_navigator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sheba_pathway/bloc/current_location/current_location_event.dart';
 import 'package:sheba_pathway/bloc/current_location/current_location_state.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sheba_pathway/l10n/app_localizations.dart';
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
